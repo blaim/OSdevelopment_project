@@ -1,9 +1,10 @@
 /***************************************************
- * 프로그램명 : 기본적인 사용방법 제시하는 메인 페이지
+ * 프로그램명 :  메인 페이지
  * 작성자 : 임경수
- * 작성일 :2020-11-01
+ * 작성일 :2020-11-10
  * 프로그램 설명 : 개발전 스프링 프레임워크 대해 내가 공부한것들 
  * 정리해서 같이 사용할 수 있도록 함
+ * 나중에 없앨 예정
  * 
  ***********************************************/
 package co.df.ds;
@@ -95,11 +96,27 @@ public class HomeController {
 		return "jsoup";
 	}
 	
+	@RequestMapping(value="/test", method = RequestMethod.GET)
+	public String TestAPI(Model model) throws Exception
+	{
+		UsingOPENAPI api = new UsingOPENAPI();
+		
+		String[] test = new String[50];
+		test = api.MovieNameSearch("어벤져스");
+		
+		
+		model.addAttribute("test", test);
+		
+		
+		return "test";
+	}
+	
 	@RequestMapping(value="/api", method = RequestMethod.GET)
 	//exception throw하면 try catch 구문 안써도 된다고 함
 	//원래는 try catch쓰는게 오류검출에서 좋은데 테스트라서 그냥 씀
 	public String OpenApi(Model model) throws Exception
 	{
+	
 		//자꾸 오류나서 되는지 확인
 		System.out.println("JSON처리 진행중");
 		//openapi페이지 들어가면 듀토리얼 있으니 그거보고 얻어올 url생성하면 됨 key는 따로 알려줌
@@ -156,3 +173,5 @@ public class HomeController {
 		return "api";
 	}
 }
+
+ 

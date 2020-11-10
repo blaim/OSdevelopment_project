@@ -1,0 +1,162 @@
+<!--제작 : 2017038057 임경수 -->
+<html>
+	
+	<head>
+		<style>
+			*{
+				margin:0px;
+				padding:0px;
+			}
+			#userid{
+				margin: 8 8;
+				height:80%;
+				width:150px;
+				font-size:20px;
+				
+			}
+			#passwd{
+				margin: 8 8;
+				height:80%;
+				width:150px;
+				font-size:20px;
+			}
+			#id_submit{
+				height:80%;
+				width:60px;
+				font-size:20px;
+			}
+			h1{
+				text-align:center;
+				font-size:100px;
+			}
+			.header{
+				background-color:yellow;
+				width:100%;
+				height:60px;
+				display:block;
+				overflow:hidden;
+			}
+			.header form{
+				width:430px;
+				margin: 0;
+				float:left;
+			}
+			.header a{
+				position:absolute;
+				top:8px;
+				font-size:30px;
+				text-decoration:none;
+				background-color:white;
+				border:2px solid black;
+			}
+			.header a:hover{
+				color:purple;
+			}
+			.container{
+				margin:30px 40px;
+			}
+			ul {
+					list-style-type: none;
+					margin: 0;
+					padding: 0;
+					
+					background-color: #333;
+				}
+				ul:after{
+					content:'';
+					display: block;
+					clear:both;
+				}
+				li {
+					float: left;
+				}
+				li a {
+					display: block;
+					color: white;
+					text-align: center;
+					padding: 14px 16px;
+					text-decoration: none;
+				}
+				li a:hover:not(.active) {
+					background-color: #111;
+				}
+				.active {
+					background-color: #4CAF50;
+				}
+			.movies{
+				
+				
+				background-color:blue;
+				top:50%;
+				left:70%;
+				
+				}
+			.spe_movie{
+				margin:20 20;
+				width:150px;
+				height:200px;
+				background-color:yellow;
+				position:static;
+				display:inline-block;
+			}
+			.footer{
+				background-color:yellow;
+				width:100%;
+				height:60px;
+				bottom:0px;
+				position:fixed;
+			}
+			.footer form{
+				margin: 0 auto;
+				width:500px;
+			}
+			#search{
+				height:70%;
+			}
+			#search_submit{
+				height:70%;
+				
+			}
+			
+		</style>
+	</head>
+	<body>
+		<div class="header">
+			<form>
+				<input id='userid' type='text' placeholder='ID'/>
+				<input id='passwd' type='password' placeholder='password'/>
+				<input id='id_submit' type='submit'>
+			</form>
+			<a id='sign_in' href="#sign">회원가입</a>
+		</div>
+		<h1>Movie Review Site</h1>
+		
+		<div class="container">
+			<div class="buttons">
+				<ul>
+					<li><a class="active" href="#main">메인</a></li>
+					<li><a href="#office">박스오피스</a></li>
+					<li><a href="#recom">추천영화</a></li>
+					<li><a href="#community">커뮤니티</a></li>
+				</ul>
+			</div>
+			<div class="movies">
+				<div class="spe_movie">
+					<div></div>
+					<div>
+						<p>100</p>
+					</div>
+				</div>
+				
+			</div>
+		</div>
+		<div class="footer">
+			<form>
+				<input id="search" type='text' />
+				<input id='search_submit' type='submit' />
+			</form>
+		</div>
+		
+	</body>
+	
+</html>
