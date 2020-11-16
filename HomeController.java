@@ -49,24 +49,45 @@ public class HomeController {
 	{
 		UsingOPENAPI conn = new UsingOPENAPI();
 		
-		if(sear_sel == "mvname")
+		if(sear_sel.equals("mvname"))
 		{
 			String[] movieNames = new String[50];
+			int size = 0;
 			
 			movieNames = conn.MovieNameSearch(search);
 			
+			for(int i=0;i<50;i++)
+			{
+				System.out.println(movieNames[i]);
+				if(movieNames[i].equals("empty"))
+					{
+						size = i;
+						break;
+					}
+			}
+			
 			model.addAttribute("movies", movieNames);
-			model.addAttribute("size", 50);
+			model.addAttribute("size", size);
 			
 		}
-		else if(sear_sel == "makername")
+		else if(sear_sel.equals("makername"))
 		{
 			String[] makerNames = new String[40];
+			int size = 0;
 			
 			makerNames = conn.CompanyNameSearch(search);
 			
+			for(int i=0;i<50;i++)
+			{
+				if(makerNames[i].equals("empty"))
+					{
+						size = i;
+						break;
+					}
+			}
+			
 			model.addAttribute("movies", makerNames);
-			model.addAttribute("size", 40);
+			model.addAttribute("size", size);
 		}
 		
 		

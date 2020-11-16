@@ -17,11 +17,77 @@ import org.json.simple.parser.JSONParser;
 public class UsingOPENAPI {
 	private String key = "f743ae62f9ae08863d48ad50b8e707d3";
 	
+	
+	
+	//String[] Company_information(String company_code) throws Exception
+	
+	
+	/**************************
+	 * 검색할 영화사 이름에 맞는 영화사들을 출력한다
+	 * 0 -> 영화사이름
+	 * 1->영화사 코드
+	 * 순서대로 크기 40짜리 배열로 출력한다
+	 * (총 개수 20개)
+	 * 없는것은 empty로 저장한다
+	 * 
+	 * @param company_name
+	 * @return
+	 * @throws Exception
+	 */
+	String[] CompanyNameSearch(String company_name) throws Exception
+	{
+		String[] companys = new String[40];
+		
+		String searchURL_text = "http://kobis.or.kr"
+				+ "/kobisopenapi/webservice/rest/company/searchCompanyList.json?key="
+				+ key
+				+ "&companyNm="
+				+company_name;
+		
+		URL searchURL = new URL(searchURL_text);
+		
+		BufferedInputStream reader = new BufferedInputStream(searchURL.openStream());
+		StringBuffer buffer = new StringBuffer();
+		int k=0;
+		byte[] b = new byte[4096];
+		while((k = reader.read(b))!=-1) {
+			buffer.append(new String(b,0,k));
+		}
+		
+		String jsontext = buffer.toString();
+		
+		JSONParser jsonparser = new JSONParser();
+		JSONObject jsonObject = (JSONObject)jsonparser.parse(jsontext);
+		
+		JSONObject comListResult = (JSONObject)jsonObject.get("companyListResult");
+		JSONArray companyList = (JSONArray)comListResult.get("companyList");
+		JSONObject company;
+		
+		int index = 0;
+		for(int i=0;i<companyList.size();i++)
+		{
+			company = (JSONObject)companyList.get(i);
+			companys[index] = (String)company.get("companyNm");
+			companys[index+1] = (String)company.get("companyCd");
+			index += 2;
+			if(index >= 40)
+				break;
+		}
+		
+		if(index <= 40)
+		{
+			for(int i=index;i<40;i++)
+				companys[index] = "empty";
+		}
+		
+		return companys;
+	}
+	
 	//검색한 단어가 포함되는 영화들의 코드를 출력한다
 	/***********************
 	 * 문자열 배열의 크기는 50으로 하고,
 	 * 만약 검색한 숫자가 50개 미만이면, 
-	 * 모자란 부분에는 null을 출력한다
+	 * 모자란 부분에는 empty을 출력한다
 	 * 짝수번째에는 영화의 이름을 저장
 	 * 홀수번째에는 영화의 코드를 저장한다
 	 * 테스트 완료
@@ -82,7 +148,7 @@ public class UsingOPENAPI {
 			
 			for(int i=(sizeof_mvList*2)+1;i<50;i++)
 			{
-				movies[i] = "null";
+				movies[i] = "empty";
 			}
 		}
 		
@@ -172,7 +238,7 @@ public class UsingOPENAPI {
 	/**************************
 	 * 
 	 *문자열 배열로 출력
-	 *만약 없으면 null이라는 문자열을 저장
+	 *만약 없으면 empty이라는 문자열을 저장
 	 *0한글영화이름
 	 *1영어영화이름
 	 *2감독이름
@@ -262,7 +328,7 @@ public class UsingOPENAPI {
 			}
 			
 			for(int i=0;i<diff_size;i++)
-				informations[i+7+sizeof_genre] = "null";
+				informations[i+7+sizeof_genre] = "empty";
 		}
 		
 		JSONArray actors = (JSONArray)mvInfo.get("actors");
@@ -286,7 +352,7 @@ public class UsingOPENAPI {
 				informations[i+12] = (String)genre.get("peopleNm");
 			}
 			for(int i=0;i<diff_size;i++)
-				informations[i+12+sizeof_genre] = "null";
+				informations[i+12+sizeof_genre] = "empty";
 		}
 		
 		

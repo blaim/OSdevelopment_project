@@ -1,6 +1,6 @@
 /*******************************************
  프로그램명 : dbSample.java
- * 작성자 : 황근민
+ * 작성자 : 황근민, 임경수
  * 작성일 : 2020-11-15
  * 프로그램 설명 :MS Access 와 Spring을 연결하는 클래스
  ***************************************/
@@ -14,6 +14,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 
 
+
 public class dbSample {
 	
 	// 드라이버 변수로 선언
@@ -22,6 +23,12 @@ public class dbSample {
 	// 파일 경로 개발자마다 다름, jdbc:ucanaccess: 부분은 동일
 	private static final String dbURL = "jdbc:ucanaccess://D://Eclipse_workspace//GYE//dataset.accdb";
 	
+	
+	/*******************************************
+	 * 작성자 : 황근민
+	 * 작성일 : 2020-11-15
+	 * 프로그램 설명 : accdb 파일과 연결해서 connection 객체를 생성하는 함수
+	 ***************************************/
 	public void testConnetion() throws Exception {
 		// 드라이버 로드
 		Class.forName(DRIVER);
@@ -36,9 +43,11 @@ public class dbSample {
 	}
 	
 	
-	//임경수
-	//유저 정보 db에 추가하는 함수
-	//테스트 완료
+	/*******************************************
+	 * 작성자 : 임경수
+	 * 작성일 : 2020-11-15
+	 * 프로그램 설명 :로그인 정보를 db에 넣은 함수
+	 ***************************************/
 	public void InsertInfo(String ID, String PW, String UserName, int age) throws Exception
 	{
 		
@@ -69,9 +78,11 @@ public class dbSample {
 		
 	}
 	
-	//임경수
-	//같은 아이디 있는지 확인하는 함수
-	//테스트 x
+	/*******************************************
+	 * 작성자 : 임경수
+	 * 작성일 : 2020-11-15
+	 * 프로그램 설명 :중복되는 로그인 정보를 받아오는 함수(미완성)
+	 ***************************************/
 	public String GetSpeID(String ID) throws Exception
 	{
 		Class.forName(DRIVER);
