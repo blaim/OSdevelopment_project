@@ -1,8 +1,8 @@
 <!-- 
-프로그램명 : 떼껄룩 메인 페이지
+프로그램명 : 떼껄룩 박스오피스 페이지
 작성자 :임경수
 작성일자 : 2020-11-26
-프로그램 설명: 떼껄룩의 메인 페이지 기능 구현. 컨트롤러에서 전달된 영화들을 화면에 출력한다
+프로그램 설명: 현재 박스오피스 영화 10개를 출력한다
 -->
 
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -92,21 +92,7 @@
 				.active {
 					background-color: #4CAF50;
 				}
-			.movies{
-				
-				
-				background-color:blue;
-				
-				
-				}
-			.spe_movie{
-				margin:20 20;
-				width:150px;
-				height:200px;
-				background-color:yellow;
-				display:inline-block;
-			}
-			
+		
 			
 			.footer{
 				background-color:yellow;
@@ -137,7 +123,60 @@
 				word-break:break-all;
 				display:inline-flex;
 			}
+			.movies{
+				background-color:blue;
+			}
 			
+			.spe_movie{
+				display:grid;
+				width:100%;
+				height:300px;
+				grid-template-columns: 1fr 3fr 3fr;
+				grid-template-rows : 1fr 1fr;
+				grid-gap:10px;
+				
+				background-color:blue;
+			}
+			
+			.spe_movie *{
+				margin:10px;
+				text-align:center;
+				line-height:125px;
+				font-size:30px;
+				
+			}
+			
+			#movie_image{
+				grid-column-start : 1;
+				grid-column-end:2;
+				grid-row-start:1;
+				grid-row-end:3;
+				background-color:green;
+			}
+			
+			#movie_name{
+				grid-column-start:2;
+				grid-column-end:4;
+				grid-row-start:1;
+				grid-row-start:1;
+				background-color:red;
+			}
+			
+			#watcher{
+				grid-column-start:2;
+				grid-column-end:3;
+				grid-row-start:2;
+				grid-row-start:2;
+				background-color:lime;
+			}
+			
+			#cumul_money{
+				grid-column-start:3;
+				grid-column-end:4;
+				grid-row-start:2;
+				grid-row-start:2;
+				background-color:yellow;
+			}
 			
 		</style>
 	</head>
@@ -155,27 +194,24 @@
 		<div class="container">
 			<div class="buttons">
 				<ul>
-					<li><a class="active" href="/GYE">메인</a></li>
-					<li><a href="/GYE/BoxOffice">박스오피스</a></li>
+					<li><a href="/GYE">메인</a></li>
+					<li><a class="active" href="/GYE/BoxOffice">박스오피스</a></li>
 					<li><a href="#recom">추천영화</a></li>
 					<li><a href="/GYE/comunity">커뮤니티</a></li>
 				</ul>
 			</div>
+
 			<div class="movies">
-			<%! int i; %>
-<%if(request.getAttribute("movies")!=null){ %>
-<% String[] movies = (String[])request.getAttribute("movies"); %>
-<% Integer size = (Integer)request.getAttribute("size"); %>
-<%for(i=0;i<size;i+=2){ %>
+<% String[] movies = (String[])request.getAttribute("bx_array"); %>
+<%for(int i=0;i<40;i+=4){ %>
 				<div class="spe_movie">
-					
-					<div id='mv_name'>
-						<p><%= movies[i] %></p>
-					</div>
-				</div>
+					<div id='movie_image'>포스터</div>
+					<div id='movie_name'><%=movies[i] %></div>
+					<div id='watcher'>누적관객 : <%=movies[i+2] %></div>
+					<div id='cumul_money'>수익 : <%=movies[i+3] %></div>
+				</div>	
+<%} %>	
 				
-				<%} %>
-<%} %>
 			</div>
 		</div>
 		<div class="footer">

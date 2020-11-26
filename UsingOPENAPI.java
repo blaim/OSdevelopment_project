@@ -146,7 +146,7 @@ public class UsingOPENAPI {
 				array_saving_index += 2;
 			}
 			
-			for(int i=(sizeof_mvList*2)+1;i<50;i++)
+			for(int i=(sizeof_mvList)+1;i<50;i++)
 			{
 				movies[i] = "empty";
 			}
