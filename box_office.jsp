@@ -16,6 +16,10 @@
 				margin:0px;
 				padding:0px;
 			}
+			body{
+				background-color:#0b0c2a;
+			}
+			
 			#userid{
 				margin: 8 8;
 				height:80%;
@@ -37,6 +41,7 @@
 			h1{
 				text-align:center;
 				font-size:100px;
+				color:yellow;
 			}
 			.header{
 				background-color:yellow;
@@ -142,7 +147,7 @@
 				margin:10px;
 				text-align:center;
 				line-height:125px;
-				font-size:30px;
+				font-size:35px;
 				
 			}
 			
@@ -152,6 +157,8 @@
 				grid-row-start:1;
 				grid-row-end:3;
 				background-color:green;
+				width:200px;
+				height:290px;
 			}
 			
 			#movie_name{
@@ -182,11 +189,7 @@
 	</head>
 	<body>
 		<div class="header">
-			<form>
-				<input id='userid' type='text' placeholder='ID'/>
-				<input id='passwd' type='password' placeholder='password'/>
-				<input id='id_submit' type='submit'>
-			</form>
+			
 			<a id='sign_in' href="#sign">회원가입</a>
 		</div>
 		<h1>Take A Look</h1>
@@ -205,8 +208,8 @@
 <% String[] movies = (String[])request.getAttribute("bx_array"); %>
 <%for(int i=0;i<40;i+=4){ %>
 				<div class="spe_movie">
-					<div id='movie_image'>포스터</div>
-					<div id='movie_name'><%=movies[i] %></div>
+					<img id='movie_image' src="${pageContext.request.contextPath}/resources/images/<%=movies[i+1]%>.jpg" />
+					<div id='movie_name'><a href='/GYE/spe_movie?spe_movie_code=<%=movies[i+1]%>'><%=movies[i] %></a></div>
 					<div id='watcher'>누적관객 : <%=movies[i+2] %></div>
 					<div id='cumul_money'>수익 : <%=movies[i+3] %></div>
 				</div>	

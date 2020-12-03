@@ -1,7 +1,7 @@
 /*******************************************
  프로그램명 : json을 이용한 open api 데이터 읽어오는 클래스
  * 작성자 : 임경수
- * 작성일 : 2020-11-10
+ * 작성일 : 2020-12-01
  * 프로그램 설명 : 다양한 검색기능할때 편하게 하기 위해 한 클래스 안에
  * open api에 접근하는 다양한 함수들을 넣는다
  ***************************************/
@@ -248,11 +248,12 @@ public class UsingOPENAPI {
 	 *6.개봉일자
 	 *7~11장르 목록
 	 *12 ~ 19 출연배우 목록
+	 *20 영화 코드 저장
 	 *테스트 완료
 	 */
 	String[] MovieCodeSearch(String movie_code) throws Exception
 	{
-		String[] informations = new String[20];
+		String[] informations = new String[21];
 		
 		String SearchURL_text = "http://www.kobis.or.kr/kobisopenapi/webservice/"
 				+ "rest/movie/searchMovieInfo.json?key="
@@ -356,6 +357,7 @@ public class UsingOPENAPI {
 		}
 		
 		
+		informations[20] = movie_code;
 		
 		
 		//jsonarray 크기는 jsonarray.size로 구함
