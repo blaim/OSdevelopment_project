@@ -9,6 +9,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+<link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/moonspam/NanumSquare/master/nanumsquare.css">
 <html>
 	
 	<head>
@@ -17,8 +19,12 @@
 				margin:0px;
 				padding:0px;
 			}
+            .nanumsquare {
+             font-family: 'NanumSquare', sans-serif !important;
+            }
 			body{
 				background-color:#0b0c2a;
+                font-weight: bold;
 			}
 			
 			#userid{
@@ -42,11 +48,11 @@
 			h1{
 				text-align:center;
 				font-size:100px;
-				color:yellow;
+				color:white;
 				
 			}
 			.header{
-				background-color:yellow;
+				background-color:#070720;
 				width:100%;
 				height:60px;
 				display:block;
@@ -76,7 +82,7 @@
 					margin: 0;
 					padding: 0;
 					
-					background-color: #333;
+					background-color:#1A1B28;
 				}
 				ul:after{
 					content:'';
@@ -97,26 +103,28 @@
 					background-color: #111;
 				}
 				.active {
-					background-color: #4CAF50;
+					background-color: #e53637;
 				}
 			.movies{
 				
 				
-				background-color:blue;
+				background-color:#252642;
 				
 				
 				}
 			.spe_movie{
-				margin:20 20;
+				margin:20px 20px;
 				width:150px;
 				height:200px;
-				background-color:yellow;
+				background-color:#e3dede;
 				display:inline-block;
+                padding: 18px 30px 16px 20px;
+                border-radius: 10px;
 			}
 			
 			
 			.footer{
-				background-color:yellow;
+				background-color:#070720;
 				width:100%;
 				height:60px;
 				bottom:0px;
@@ -146,12 +154,14 @@
 			}
 			
 			#title_box{
-				background-color:red;
+				background-color:#1d1e39;
 				width:100%;
 				height:100px;
 				font-size:70px;
 				text-align:center;
 				font-weight:bold;
+                color: white;
+                border-radius: 10px;
 			}
 			
 			
@@ -160,8 +170,17 @@
 	</head>
 	<body>
 		<div class="header">
-			
-			<a id='sign_in' href="#sign">로그인</a>
+			<c:choose>
+				<c:when test="${sessionScope.loginCheck eq true}">        	
+        			${sessionScope.id} 님이 로그인 되었습니다.  
+        			<form action="logout.do" method='post'>
+        				<button type="submit" class="site-btn">로그아웃</button>
+        			</form>
+    			</c:when>
+    			<c:otherwise>
+					<a id='sign_in' href="/GYE/login">회원가입</a>
+				</c:otherwise>
+			</c:choose>	
 		</div>
 		<h1>Take A Look</h1>
 		
@@ -180,7 +199,7 @@
 <% String[] movies = (String[])request.getAttribute("movies"); %>
 <% Integer size = (Integer)request.getAttribute("size"); %>
 				
-<%for(i=0;i<size;i+=2){ %>
+<%for(i=0;i<size; i+=2 ){ %>
 				<div class="spe_movie">
 					
 					<div id='mv_name'>

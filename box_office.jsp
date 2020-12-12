@@ -8,6 +8,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+<link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/moonspam/NanumSquare/master/nanumsquare.css">
 <html>
 	
 	<head>
@@ -16,8 +18,12 @@
 				margin:0px;
 				padding:0px;
 			}
+            .nanumsquare {
+             font-family: 'NanumSquare', sans-serif !important;
+            }
 			body{
 				background-color:#0b0c2a;
+                font-weight: bold;
 			}
 			
 			#userid{
@@ -41,10 +47,10 @@
 			h1{
 				text-align:center;
 				font-size:100px;
-				color:yellow;
+				color:white;
 			}
 			.header{
-				background-color:yellow;
+				background-color:#070720;
 				width:100%;
 				height:60px;
 				display:block;
@@ -74,7 +80,7 @@
 					margin: 0;
 					padding: 0;
 					
-					background-color: #333;
+					background-color: #1A1B28;
 				}
 				ul:after{
 					content:'';
@@ -95,12 +101,12 @@
 					background-color: #111;
 				}
 				.active {
-					background-color: #4CAF50;
+					background-color: #e53637;
 				}
 		
 			
 			.footer{
-				background-color:yellow;
+				background-color:#070720;
 				width:100%;
 				height:60px;
 				bottom:0px;
@@ -129,7 +135,7 @@
 				display:inline-flex;
 			}
 			.movies{
-				background-color:blue;
+				background-color:#252642;
 			}
 			
 			.spe_movie{
@@ -140,7 +146,7 @@
 				grid-template-rows : 1fr 1fr;
 				grid-gap:10px;
 				
-				background-color:blue;
+				background-color:#252642;
 			}
 			
 			.spe_movie *{
@@ -156,9 +162,10 @@
 				grid-column-end:2;
 				grid-row-start:1;
 				grid-row-end:3;
-				background-color:green;
+		a		background-color:#e3dede;
 				width:200px;
 				height:290px;
+                border-radius: 10px;
 			}
 			
 			#movie_name{
@@ -166,7 +173,8 @@
 				grid-column-end:4;
 				grid-row-start:1;
 				grid-row-start:1;
-				background-color:red;
+				background-color:#50528F;
+                border-radius: 10px;
 			}
 			
 			#watcher{
@@ -174,7 +182,8 @@
 				grid-column-end:3;
 				grid-row-start:2;
 				grid-row-start:2;
-				background-color:lime;
+				background-color:#343285;
+                border-radius: 10px;
 			}
 			
 			#cumul_money{
@@ -182,15 +191,25 @@
 				grid-column-end:4;
 				grid-row-start:2;
 				grid-row-start:2;
-				background-color:yellow;
+				background-color:#309191;
+                border-radius: 10px;
 			}
 			
 		</style>
 	</head>
 	<body>
 		<div class="header">
-			
-			<a id='sign_in' href="#sign">회원가입</a>
+			<c:choose>
+				<c:when test="${sessionScope.loginCheck eq true}">        	
+        			${sessionScope.id} 님이 로그인 되었습니다.  
+        			<form action="logout.do" method='post'>
+        				<button type="submit" class="site-btn">로그아웃</button>
+        			</form>
+    			</c:when>
+    			<c:otherwise>
+					<a id='sign_in' href="/GYE/login">회원가입</a>
+				</c:otherwise>
+			</c:choose>	
 		</div>
 		<h1>Take A Look</h1>
 		
