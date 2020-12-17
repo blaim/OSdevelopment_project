@@ -10,7 +10,7 @@
     pageEncoding="UTF-8"%>
     <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
-	
+	<title>TakeALook</title>
 	<head>
 		<style>
 			*{
@@ -236,17 +236,29 @@
 				font-weight:bold;
 				font-size:30px;
 			}
+			
+			#to_main{
+				color:white;
+				position:absolute;
+				font-size:60px;
+				font-weight:bold;
+				text-decoration:none;
+			}
+			
+			#to_main:hover{
+				color:yellow;
+			}
+			
 		</style>
 	</head>
 	<body>
+	<a id='to_main' href="/GYE">떼껄룩</a>
 	<%String[] post_information = (String[])request.getAttribute("post_information");  %>
 	<%String post_id_equal; %>
 		<div id='wrapper'>
-		<!-- 이부분 세션 아이디로 변경 필요 -->
-			<%if("dlarudtn8".equals((String)post_information[0])){ %>
-			<%post_id_equal = "yes"; %>
-			<%}else{post_id_equal = "no";} %>
-			<button type='button' id='delete_post' onclick='delete_post_function("<%=post_information[1]%>", "<%=post_id_equal%>");'>X</button>
+		<div id='wirter_information_for_js' style='display:none;'><%=post_information[0]%></div>
+		
+			<button type='button' id='delete_post' onclick='delete_post_function("<%=post_information[1]%>", "${sessionScope.id}");'>X</button>
 			<div id='title'>
 				<%=post_information[1] %>
 			</div>
@@ -278,13 +290,10 @@
 				<div id='one_comment'>	
 					<%int string_size = post_information[1].length(); %>
 					
-					<!-- 이부분 아이디 세션으로 변경 필요 -->
-					<%if("dlarudtn".equals(comments.get(i))){ %>
-					<%com_id_equal = "yes"; %>
-					<%}else{com_id_equal = "no";} %>
+					
 					<%String added = (String)comments.get(i+2) + string_size+ post_information[1]+ (String)comments.get(i+1);%>
 					<%added = added.replace(System.getProperty("line.separator").toString(), ""); %>
-					<button type='button' id='comment_delete' onclick='javascript:delete_comment_function("<%=added%>", "<%=com_id_equal%>")' >x</button>
+					<button type='button' id='comment_delete' onclick='javascript:delete_comment_function("<%=added%>", "${sessionScope.id}", "<%=comments.get(i)%>")' >x</button>
 					<div id='comment_writer'>
 						<%=comments.get(i) %>
 					</div>
@@ -301,10 +310,10 @@
 			</div>
 			<div id='comment_write_box'>
 				
-				<!--name부분 이걸로 바꿔야되 ${sessionScope.id} -->
+				
 				<form id='write_comment' method='post' action='write_comment.do'>
-					<input type='text' name="comment_writer_name" style="display:none" value='dlarudtn' ></input>
-					<div id='current_comment_writer' >dlarudtn</div>
+					<input type='text' name="comment_writer_name" style="display:none" value='${sessionScope.id}' ></input>
+					<div id='current_comment_writer' >${sessionScope.id}</div>
 					<textarea name='comment_content' placeholder='댓글을 작성할때는 조심' id='comment'></textarea>
 					<button id='submit_comment' name='title' value='<%=post_information[1] %>' type='submit'>작성</button>
 				</form>
@@ -315,7 +324,10 @@
 		function delete_post_function(title, isequal){
 			if(confirm("글을 삭제하시겠습니까?"))
 			{
-				if(isequal == "yes")
+				var writername = document.getElementById("wirter_information_for_js").innerHTML;
+				
+				
+				if(isequal == writername)
 				{
 					var form = document.createElement('form');
 					form.setAttribute('method', 'post');
@@ -342,10 +354,11 @@
 			
 		}
 		
-		function delete_comment_function(ssstring, isequal){
+		function delete_comment_function(ssstring, currentId, writerName){
 			if(confirm("댓글을 삭제하시겠습니까?"))
-			{
-				if(isequal == "yes")
+			{	
+				
+				if(currentId == writerName)
 				{
 					var form = document.createElement('form');
 					form.setAttribute('method', 'post');

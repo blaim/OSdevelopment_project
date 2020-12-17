@@ -14,6 +14,7 @@
 <html>
 	
 	<head>
+		<title>TakeALook</title>
 		<style>
 			*{
 				margin:0px;
@@ -57,18 +58,31 @@
 				height:60px;
 				display:block;
 				overflow:hidden;
+				color:white;
+				font-size:30px;
+				text-align:center;
 			}
 			.header form{
-				width:430px;
+				width:50px;
 				margin: 0;
 				float:left;
 			}
+			
+			.header form button{
+				width:100px;
+				height:60px;
+				font-size:20px;
+				font-weight:bold;
+			}
+			
+			
 			.header a{
 				position:absolute;
 				top:8px;
 				font-size:30px;
 				text-decoration:none;
-				background-color:white;
+				color:white;
+				left:50px;
 				border:2px solid black;
 			}
 			.header a:hover{
@@ -151,6 +165,12 @@
 			#mv_name a{
 				word-break:break-all;
 				display:inline-flex;
+				color:black;
+				text-decoration:none;
+			}
+			
+			#mv_name a:hover{
+				color:white;
 			}
 			
 			#title_box{
@@ -178,7 +198,7 @@
         			</form>
     			</c:when>
     			<c:otherwise>
-					<a id='sign_in' href="/GYE/login">회원가입</a>
+					<a id='sign_in' href="/GYE/login">로그인</a>
 				</c:otherwise>
 			</c:choose>	
 		</div>
@@ -189,7 +209,7 @@
 				<ul>
 					<li><a class="active" href="/GYE">메인</a></li>
 					<li><a href="/GYE/BoxOffice">박스오피스</a></li>
-					<li><a href="#recom">추천영화</a></li>
+					<li><a href="/GYE/recommend">추천영화</a></li>
 					<li><a href="/GYE/comunity">커뮤니티</a></li>
 				</ul>
 			</div>

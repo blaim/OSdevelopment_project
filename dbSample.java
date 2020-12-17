@@ -375,10 +375,12 @@ public class dbSample {
 	 * 작성일 : 2020-11-15
 	 * 프로그램 설명 :로그인 정보를 db에 넣은 함수
 	 ***************************************/
-	public void InsertInfo(String ID, String PW, String UserName, int age) throws Exception
+	// 수정: 황근민
+	// 수정 내역: 회원가입할 때 입력 받을 정보(사용자 정의 질문과 답변) 추가
+	public void InsertInfo(String ID, String PW, String UserName, int age, String Question, String Answer) throws Exception
 	{
 		
-		Class.forName(DRIVER);
+Class.forName(DRIVER);
 				
 		
 		try(Connection conn = DriverManager.getConnection(dbURL)){
@@ -386,13 +388,15 @@ public class dbSample {
 			
 			
 				PreparedStatement ps = conn.prepareStatement(
-						"insert into userinfo(id, username, password, age) "
-						+ "values (?, ?, ?, ?)");
+						"insert into userinfo(id, username, password, age, question, answer)"
+						+ "values (?, ?, ?, ?, ?, ?)");
 				
 				ps.setString(1, ID);
 				ps.setString(2, UserName);
 				ps.setString(3, PW);
 				ps.setInt(4, age);
+				ps.setString(5, Question);
+				ps.setString(6, Answer);
 				
 				ps.executeUpdate();
 				
@@ -459,6 +463,28 @@ public class dbSample {
 			
 		}
 		
+		
+		public String Find_password(String id, String Question, String Answer) throws Exception
+		{
+			Class.forName(DRIVER);				 
+			try(Connection conn = DriverManager.getConnection(dbURL))
+			{
+				System.out.println("연결 성공");
+				String SQL = "SELECT * from userinfo";
+				Statement st = conn.createStatement();
+				ResultSet rs = st.executeQuery(SQL);
+						
+				while(rs.next())
+				{
+	
+					if(rs.getString("ID").equals(id)&&rs.getString("question").equals(Question)&&rs.getString("answer").equals(Answer))
+						return rs.getString("password");
+					
+				}						
+				}catch(Exception e) {	e.printStackTrace();	}						
+				return "틀린 회원 정보입니다.";
+		}
+		
 		// 작성자 황근민
 				// 사용자가 입력한 id와 password를 db와 비교하여 로그인을 실행하는 함수
 				public boolean Login(String id, String pw) throws Exception
@@ -484,5 +510,79 @@ public class dbSample {
 						
 						return false;
 					}
+				
+				// 작성자 : 황근민
+				// 사용자가 커뮤니티 게시판에 글을 작성하면 글 정보를 DB에 저장하는 함수
+				//수정 임경수
+				// checkbox이용가능하도록
+				public void InsertCommunity(String Writer, String Title, String Contents, String Spoiler) throws Exception
+				{
+					Class.forName(DRIVER);
+							
+					
+					try(Connection conn = DriverManager.getConnection(dbURL)){
+						System.out.println("연결 성공");
+						
+						
+							PreparedStatement ps = conn.prepareStatement(
+									"insert into reviews(writer, title, contents, spoiler) "
+									+ "values (?, ?, ?, ?)");
+							
+							ps.setString(1, Writer);
+							ps.setString(2, Title);
+							ps.setNString(3, Contents);
+							System.out.println(Spoiler);
+							if(Spoiler==null || Spoiler.equals("null") || Spoiler.isEmpty())
+							{
+								ps.setString(4,"x");
+							}
+							else
+							{
+								ps.setString(4, "o");
+							}
+							ps.executeUpdate();
+							
+							System.out.println("success");
+						
+							
+					} catch(Exception e) {
+						e.printStackTrace();
+					}
+				}
+				
+				// 작성자: 황근민
+				// DB에서 커뮤니티 관련 정보를 테이블로 만들어서 반환한다.
+				//수정 :임경수
+				//작성한 순서대로 불러오도록 변경
+				public ArrayList<String> GetCommunity() throws Exception
+				{
+					Class.forName(DRIVER);
+					ArrayList<String> Community = new ArrayList<String>();
+					
+					try(Connection conn = DriverManager.getConnection(dbURL))
+					{
+						System.out.println("연결 성공");
+						
+						Statement st = conn.createStatement();
+						ResultSet rs = st.executeQuery("SELECT * from reviews order by ID desc");
+						
+						while(rs.next())
+						{
+							Community.add(rs.getString("writer"));
+							Community.add(rs.getString("title"));
+							Community.add(rs.getString("contents"));
+							Community.add(rs.getString("like"));
+							Community.add(rs.getString("dislike"));
+							Community.add(rs.getString("write_time").substring(0,19));
+							Community.add(rs.getString("Spoiler"));
+							Community.add(rs.getString("ID"));
+						}
+						
+					}catch(Exception e) {
+						e.printStackTrace();
+					}
+					
+					return Community;
+				}
 
 }

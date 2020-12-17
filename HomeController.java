@@ -111,6 +111,16 @@ public class HomeController {
 	
 	
 	//작성자 : 임경수
+	//영화 추천 페이지를 출력한다
+	@RequestMapping(value = "/recommend", method = RequestMethod.GET)
+	public String recommend_movie(String spe_movie_code, Model model) throws Exception
+	{
+		return "movie_recommend";
+	}
+	
+	
+	
+	//작성자 : 임경수
 	//영화 검색 쿼리 받아서 검색 결과 출력하는 페이지
 	@RequestMapping(value="member.do", method = RequestMethod.GET)
 	public String memberRegi(String sear_sel, String search, Model model) throws Exception
@@ -192,6 +202,8 @@ public class HomeController {
 		return "main_page";
 	}
 	
+	
+	
 	//현재 일자의 박스오피스 불러오고 넘기는것 구현
 	//작성자 : 임경수
 	@RequestMapping(value="BoxOffice", method = RequestMethod.GET)
@@ -213,12 +225,22 @@ public class HomeController {
 	}
 	
 	//작성자 : 임경수
-	//커뮤니티 페이지 출력
-	@RequestMapping(value="/comunity", method = RequestMethod.GET)
-	public String comunity(Model model) throws Exception
-	{
-		return "comunity";
-	}
+		//커뮤니티 페이지 출력
+		//수정: 황근민
+		//커뮤니티 페이지를 출력할 때 DB에 저장된 커뮤니티 글의 목록을 출력
+		@RequestMapping(value="/comunity", method = RequestMethod.GET)
+		public String comunity(Model model) throws Exception
+		{
+				dbSample communityDB = new dbSample();
+				
+				ArrayList<String> Community = new ArrayList<String>();
+				Community = communityDB.GetCommunity();
+					
+				model.addAttribute("Community", Community);		
+				
+				
+				return "comunity";
+		}
 	
 	
 	//작성자 : 임경수
@@ -263,7 +285,7 @@ public class HomeController {
 	//수정내역 : 중복 내용이 아니면 아이디 생성 완료 창 띄우고
 	//중복이라면 경고 창 띄운후 다시 아이디 생성 페이지로 이동한다
 	@RequestMapping(value="register.do", method = RequestMethod.POST)
-	String RegisterHandle(String ID, String PW, String PW_repeat, String name, int age, Model model) throws Exception
+	String RegisterHandle(String ID, String PW, String PW_repeat, String name, int age, String Question, String Answer, Model model) throws Exception
 	{
 		
 		if(!PW.equals(PW_repeat))
@@ -276,9 +298,9 @@ public class HomeController {
 			dbSample db = new dbSample();
 			
 			if(db.checkID(ID)) {
-				db.InsertInfo(ID, PW, name, age);
+				db.InsertInfo(ID, PW, name, age, Question, Answer);
 				System.out.println("success");			
-				return "register_page";
+				return "login";
 			}
 			
 			else
@@ -300,12 +322,27 @@ public class HomeController {
 	//작성자: 황근민
 	//로그인 페이지 실행, DB와 비교하여 아이디와 비밀번호가 일치하면 세션을 클라이언트에게 제공
 	@RequestMapping(value="/login.do", method = RequestMethod.POST)
-	String LoginHandle(HttpSession session, @RequestParam(value="ID") String ID, @RequestParam(value="PW") String PW) throws Exception
+	String LoginHandle(HttpSession session,Locale locale, Model model, @RequestParam(value="ID") String ID, @RequestParam(value="PW") String PW) throws Exception
 	{
 		dbSample db = new dbSample();
 		
 		if(db.Login(ID, PW))
 			{
+				Date date = new Date();
+				
+				
+				
+				JsoupConnect jc = new JsoupConnect();
+				ArrayList jsoup_movie = jc.GetCurrentMovieList();
+				DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
+				
+				
+				String formattedDate = dateFormat.format(date);
+			
+					
+				model.addAttribute("serverTime", formattedDate );
+				model.addAttribute("current_movies", jsoup_movie);
+				
 				session.setAttribute("loginCheck", true);
 				session.setAttribute("id", ID);
 				System.out.println("success_로그인 성공.");
@@ -327,7 +364,7 @@ public class HomeController {
         session.setAttribute("loginCheck",null);
         session.setAttribute("id",null);
         
-        return "main_page";
+        return "login";
     }
 	
 	
@@ -366,9 +403,7 @@ public class HomeController {
 			return "main_page";
 		}
 		
-		
-		
-		
+			
 		like = URLEncoder.encode(like,"UTF-8");
         
         return "redirect:http://localhost:7569/GYE/comunity_post?title=" + like;
@@ -394,7 +429,8 @@ public class HomeController {
 	        return "redirect:http://localhost:7569/GYE/comunity_post?title=" + dislike;
 	    }
 		
-		
+		//작성자 : 임경수
+		//커뮤니티 페이지의 댓글을 작성한다
 		@RequestMapping(value="/write_comment.do", method = RequestMethod.POST)
 		public String WriteCommentProcess(String comment_writer_name, String comment_content, String title)throws Exception
 		{
@@ -414,6 +450,8 @@ public class HomeController {
 	        return "redirect:http://localhost:7569/GYE/comunity_post?title=" + title;
 		}
 		
+		//작성자 : 임경수
+		//커뮤니티 페이지의 댓글을 삭제한다
 		@RequestMapping(value="/delete_comment.do", method = RequestMethod.POST)
 		public String DeleteCommentProcess(String delete_element)throws Exception
 		{
@@ -439,10 +477,14 @@ public class HomeController {
 	        return "redirect:http://localhost:7569/GYE/comunity_post?title=" + title;
 		}
 		
+		
+		//작성자 : 임경수
+		//커뮤니티 페이지의 글을 삭제한다
 		@RequestMapping(value="/delete_post.do", method = RequestMethod.POST)
-		public String DeleteOnePostProcess(String title_name)throws Exception
+		public String DeleteOnePostProcess(String title_name, Model model)throws Exception
 		{
 			dbSample conn = new dbSample();
+			dbSample communityDB = new dbSample();
 			
 			if(conn.Delete_post(title_name)==true)
 				System.out.println("delete successful");
@@ -450,7 +492,81 @@ public class HomeController {
 				System.out.println("delete not completed");
 			
 			title_name = URLEncoder.encode(title_name,"UTF-8");
+			
+			ArrayList<String> Community = new ArrayList<String>();
+			Community = communityDB.GetCommunity();				
+			model.addAttribute("Community", Community);
+			
 	        return "comunity";
+		}
+		
+		
+		//작성자:황근민
+		//커뮤니티 페이지에서 글을 쓰고 글에 관련된 내용을 DB에 전달
+		@RequestMapping(value="/community.do", method = RequestMethod.GET)
+		public String communityHandler(String Writer, String Title, String Contents, String Spoiler, Model model) throws Exception
+		{
+			dbSample db = new dbSample();
+			dbSample communityDB = new dbSample();
+			
+			if(Title == "주의!!! 스포일러 포함 글") {
+				ArrayList<String> Community = new ArrayList<String>();
+				Community = communityDB.GetCommunity();
+					
+				model.addAttribute("Community", Community);
+				return "comnunity";
+			}
+			else
+			{
+				db.InsertCommunity(Writer, Title, Contents, Spoiler);
+				ArrayList<String> Community = new ArrayList<String>();
+				Community = communityDB.GetCommunity();				
+				model.addAttribute("Community", Community);
+			}
+			return "comunity";
+		}
+		
+		
+		@RequestMapping(value="/register", method = RequestMethod.GET)
+		public String Register_ID(Model model)
+		{
+			return "sign_up";
+		}
+		
+		@RequestMapping(value="/find_password", method = RequestMethod.GET)
+		public String Find_Password(Model model)
+		{
+			return "find_password";
+		}
+		
+		//작성자:황근민
+		//사용자가 입력한 정보를 바탕으로 비밀번호를 반환하거나 틀린 정보임을 반환한다.
+		@RequestMapping(value="/find_password.do", method = RequestMethod.POST)
+		String FindPasswordHandler(Model model, String ID, String Question, String Answer) throws Exception
+		{
+			dbSample db = new dbSample();
+			String result;
+			
+			result = db.Find_password(ID, Question, Answer);
+			
+			model.addAttribute("result", result);
+			
+			return "find_password_result";
+		}
+		
+		//작성자:황근민
+		//비밀번호 찾기의 결과 화면을 출력한다
+		@RequestMapping(value="/find_password_result", method = RequestMethod.POST)
+		public String Find_Password_Result(Model model, String ID, String Question, String Answer) throws Exception
+		{
+			dbSample db = new dbSample();
+			String result;
+			
+			result = db.Find_password(ID, Question, Answer);
+			
+			model.addAttribute("result", result);
+			
+			return "find_password_result";
 		}
 		
 }

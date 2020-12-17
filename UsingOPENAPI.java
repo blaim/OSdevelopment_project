@@ -216,7 +216,7 @@ public class UsingOPENAPI {
 			{
 				specific_movie = (JSONObject)bxoffice_array.get(i);
 				
-				box_offices[array_saving_index] = (String)specific_movie.get("movieNm");
+				box_offices[array_saving_index] =(String)specific_movie.get("movieNm");
 				box_offices[array_saving_index+1] = (String)specific_movie.get("movieCd");
 				box_offices[array_saving_index+2] = (String)specific_movie.get("audiAcc");
 				box_offices[array_saving_index+3] = (String)specific_movie.get("salesAcc");
@@ -287,17 +287,32 @@ public class UsingOPENAPI {
 		informations[1] = (String)mvInfo.get("movieNmEn");
 		
 		JSONArray directors = (JSONArray)mvInfo.get("directors");
+		try {
 		JSONObject director = (JSONObject)directors.get(0);
 		informations[2] = (String)director.get("peopleNm");
+		}catch(Exception e)
+		{
+			informations[2] = "감독정보 없음";
+		}
 		
 		JSONArray watch_limits = (JSONArray)mvInfo.get("audits");
+		try {
 		JSONObject watch_limit = (JSONObject)watch_limits.get(0);
 		informations[3] = (String)watch_limit.get("watchGradeNm");
+		}catch(Exception e)
+		{
+			informations[3] = "연령정보 없음";
+		}
 		
 		
 		JSONArray nations = (JSONArray)mvInfo.get("nations");
+		try {
 		JSONObject nation = (JSONObject)nations.get(0);
 		informations[4] = (String)nation.get("nationNm");
+		}catch(Exception e)
+		{
+			informations[4] = "국가정보 없음";
+		}
 
 		
 		JSONArray companys = (JSONArray)mvInfo.get("companys");
